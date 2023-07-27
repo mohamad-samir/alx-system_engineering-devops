@@ -1,22 +1,46 @@
 #!/usr/bin/env bash
-# Gives information about the school file.
+# This script displays information about a file in the current directory.
+filename="school"
 
-file="school"
+# if [ ! -e "$filename" ]; then
+#     echo "$filename file does not exist"
+# elif [[ ! -f "$filename" && ! -s "$filename" ]]; then
+#     echo "$filename file exists"
+#     echo "$filename file is empty"
+# elif [[ ! -f "$filename" && -s "$filename" ]]; then
+#     echo "$filename file exists"
+#     echo "$filename file is not empty"
+# elif [[ -f "$filename" && ! -s "$filename" ]]; then
+#     echo "$filename file exists"
+#     echo "$filename file is empty"
+#     echo "$filename is a regular file"
+# elif [[ -f "$filename" && -s "$filename" ]]; then
+#     echo "$filename file exists"
+#     echo "$filename file is not empty"
+#     echo "$filename is a regular file"
+# fi
 
-if [ -e "${file}" ]
-then
-	echo "${file} file exists"
-	if [ -s "${file}" ]
-	then
-		echo "${file} file is not empty"
-	else
-		echo "${file} file is empty"
-	fi
 
-	if [ -f "${file}" ]
-	then
-		echo "${file} is a regular file"
-	fi
+if [ ! -e "$filename" ]; then
+    echo "$filename file does not exist"
 else
-	echo "${file} file does not exist"
+    if [ -f "$filename" ]; then
+        if [ -s "$filename" ]; then
+            echo "$filename file exists"
+            echo "$filename file is not empty"
+            echo "$filename is a regular file"
+        else
+            echo "$filename file exists"
+            echo "$filename file is empty"
+            echo "$filename is a regular file"
+        fi
+    else
+        if [ -s "$filename" ]; then
+            echo "$filename file exists"
+            echo "$filename file is not empty"
+        else
+            echo "$filename file exists"
+            echo "$filename file is empty"
+        fi
+    fi
 fi

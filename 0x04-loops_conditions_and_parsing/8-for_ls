@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# Display the files on the current directory with only it's name
+# This script displays "Best School" 10 times except for the 4th and 8th iteration.
+FILES=$(ls)
 
-list=$(ls)
-
-for element in ${list}; do echo "${element}" | cut -d "-" -f 2; done
+for file in ${FILES}
+do
+    filename=$(echo "$file" | cut -d '-' -f2-)
+    echo "$filename"
+done
