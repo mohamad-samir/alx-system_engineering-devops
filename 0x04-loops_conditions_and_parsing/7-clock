@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 # This script displays numbers from 1 to 20.
-hour=0
 
+hour=0
 while [ $hour -le 12 ]
 do
+    echo "Hour: $hour"
     minute=1
-    echo "Hour: ${hour}"
-
-    while [ $minute -lt 60 ]
+    while [ $minute -le 59 ]
     do
         echo $minute
-        minute=$(( minute + 1 ))
+        ((minute++))
     done
-
-    hour=$(( hour + 1 ))
+    ((hour++))
 done
