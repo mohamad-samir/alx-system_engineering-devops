@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# Displays To infinity and beyond indefinitely each two seconds and have a trap for SIGNALS.
+# This script displays a string infinitely with a 2-second delay between each iteration.
+# It catches a SIGTERM signal and displays a text.
+invincible()
+{
+    echo "I am invincible!!!"
+}
 
-trap "echo \"I am invincible!!!\"" SIGTERM
+trap invincible SIGTERM
 
-while true
-do
-	echo "To infinity and beyond"
-	sleep 2
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
 done
+
