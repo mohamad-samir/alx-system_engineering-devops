@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script displays a string infinitely with a 2-second delay between each iteration.
+# Bash script that displays To infinity and beyond indefinitely
 while true; do
     echo "To infinity and beyond"
     sleep 2

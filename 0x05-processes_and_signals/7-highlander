@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
-# This script displays a string infinitely with a 2-second delay between each iteration.
-# It catches a SIGTERM signal and displays a text.
-invincible()
-{
-    echo "I am invincible!!!"
-}
-
-trap invincible SIGTERM
-
+# Bash script that stops 4-to_infinity_and_beyond process
 while true; do
+    trap "echo I am invincible!!!" SIGTERM
     echo "To infinity and beyond"
     sleep 2
 done
-
