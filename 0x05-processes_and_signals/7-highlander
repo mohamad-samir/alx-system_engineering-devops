@@ -1,18 +1,10 @@
 #!/usr/bin/env bash
-# This script displays a string infinitely with a 2-second delay between each iteration.
-# It catches a SIGTERM signal and displays a text.
+# Displays To infinity and beyond indefinitely each two seconds and have a trap for SIGNALS.
 
-# Function to handle SIGTERM signal
-term_handler(){
-  echo "I am invincible!!!"
-}
+trap "echo \"I am invincible!!!\"" SIGTERM
 
-# Trap SIGTERM signal and call term_handler function when that happens
-trap 'term_handler' SIGTERM
-
-# Loop indefinitely
 while true
 do
-  echo "To infinity and beyond"
-  sleep 2
+	echo "To infinity and beyond"
+	sleep 2
 done

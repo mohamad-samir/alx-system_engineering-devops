@@ -1,33 +1,13 @@
 #!/usr/bin/env bash
-# This script displays a string infinitely with a 2-second delay between each iteration.
-# It creates a pid file in the var/ directory
-# It catches a SIGTERM signal and displays a text, deletes the created file then terminates itself.
-# It catches a SIGINT signal and displays a different text.
+# Create a .pid file on /var/run and this process can be killed (Have special interactions)
+trap "echo \"Y U no love me?!\"; exit" SIGINT
+trap "sudo rm /var/run/myscript.pid; exit" SIGQUIT
+trap "echo \"I hate the kill command\"; sudo rm /var/run/myscript.pid; exit" SIGTERM
 
 echo "$$" > /var/run/myscript.pid
 
-hate_kill()
-{
-    echo "I hate the kill command"
-}
-
-no_love()
-{
-    echo "Y U no love me?!"
-}
-
-terminate()
-{
-    rm /var/run/myscript.pid
-    exit
-}
-
-trap 'hate_kill && terminate' SIGTERM
-trap no_love SIGINT
-trap terminate SIGQUIT
-
-while true; do
-    echo "To infinity and beyond"
-    sleep 2
+while true
+do
+	echo "To infinity and beyond"
+	sleep 2
 done
-

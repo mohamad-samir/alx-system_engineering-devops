@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# This script appends a string to a file infinitely with a 2-second delay between each iteration.
+# Process that writes a message in a file
 
-while true; do
-    sudo bash -c 'echo "I am alive!" >> /tmp/my_process'
-    # echo "I am alive!" >> /tmp/my_process
-    sleep 2
+while true
+do
+	echo "I am alive!" > /tmp/my_process
+	sleep 2
 done
-
