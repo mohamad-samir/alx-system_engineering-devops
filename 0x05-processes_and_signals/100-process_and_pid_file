@@ -1,40 +1,32 @@
 #!/usr/bin/env bash
-# Bash script that:
-# Creates the file /var/run/myscript.pid containing its PID
-# Displays To infinity and beyond indefinitely
-# Displays I hate the kill command when receiving a SIGTERM signal
-# Displays Y U no love me?! when receiving a SIGINT signal
-# Deletes the file /var/run/my.pid and terminates itself when receiving a SIGQUIT or SIGTERM signal
+# This script displays a string infinitely with a 2-second delay between each iteration.
+# It creates a pid file in the var/ directory
+# It catches a SIGTERM signal and displays a text, deletes the created file then terminates itself.
+# It catches a SIGINT signal and displays a different text.
 
-# Create the file /var/run/myscript.pid containing its PID
-echo $$ > /var/run/myscript.pid
+echo "$$" > /var/run/myscript.pid
 
-# Define a function to handle SIGTERM signal
-term_handler() {
-  echo "I hate the kill command"
-  rm /var/run/myscript.pid
-  exit 0
+hate_kill()
+{
+    echo "I hate the kill command"
 }
 
-# Define a function to handle SIGINT signal
-int_handler() {
-  echo "Y U no love me?!"
+no_love()
+{
+    echo "Y U no love me?!"
 }
 
-# Define a function to handle SIGQUIT signal
-quit_handler() {
-  rm /var/run/myscript.pid
-  exit 0
+terminate()
+{
+    rm /var/run/myscript.pid
+    exit
 }
 
-# Use trap command to bind the functions to signals
-trap term_handler SIGTERM
-trap int_handler SIGINT
-trap quit_handler SIGQUIT
+trap 'hate_kill && terminate' SIGTERM
+trap no_love SIGINT
+trap terminate SIGQUIT
 
-# Display "To infinity and beyond" indefinitely
-while true
-do
-  echo "To infinity and beyond"
-  sleep 1
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
 done
