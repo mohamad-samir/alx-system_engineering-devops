@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
 # Bash script that stops 4-to_infinity_and_beyond process
-
-# Function to execute when SIGTERM is received
-handle_sigterm() {
-    echo "I am invincible!!!"
-}
-
-# Set up trap to catch SIGTERM and run handle_sigterm()
-trap handle_sigterm SIGTERM
-
-# Infinite loop
-while true
-do
+while true; do
+    trap "echo I am invincible!!!" SIGTERM
     echo "To infinity and beyond"
     sleep 2
 done
