@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 # This script displays all active IPv4 IPs on the machine it’s executed on.
-ip addr show | awk '/inet / {print \$2}' | cut -d '/' -f 1
+ip addr show | awk '/inet / {print $2}' | cut -d '/' -f 1
