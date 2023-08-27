@@ -1,0 +1,33 @@
+1. User Accessing the Website:
+A user wants to access the website hosted at www.foobar.com.
+
+2. Load-Balancer Cluster (HAproxy):
+
+Why Adding It: To distribute traffic across multiple servers, improving performance and availability.
+Cluster Configuration: Configure the load balancer as a cluster to ensure redundancy. If one load balancer fails, the other can continue to distribute traffic.
+3. Web Servers (Nginx):
+
+Why Adding Them: To handle incoming HTTP requests, serve static content, and manage SSL certificates for HTTPS.
+Role: Nginx servers receive traffic from the load balancer, serve static content over HTTPS, and distribute requests to application servers.
+4. Application Servers:
+
+Why Adding Them: To handle dynamic requests, run the application codebase, interact with databases, and generate dynamic content.
+Role: Application servers process user-specific requests, communicate with databases, and generate responses.
+5. Database Servers (MySQL Primary-Replica Cluster):
+
+Why Adding Them: To store structured data, ensure data redundancy, and improve fault tolerance.
+Cluster Configuration: Set up a primary-replica cluster to distribute the database load and provide redundancy in case of failure.
+6. New Server:
+
+Why Adding It: To increase capacity and handle more incoming traffic as the application scales.
+Role: The new server can either be a web server or an application server, helping to balance the load and improve performance.
+7. Scaling Components:
+
+Why Splitting Components: Splitting components (web server, application server, and database) onto different servers allows each server type to be optimized for its specific role. It also enhances the ability to scale each component independently as needed.
+8. Load-Balancer Cluster Configuration:
+
+Why Cluster Configuration: By configuring the load balancers as a cluster, you ensure high availability. If one load balancer becomes unavailable, the other can seamlessly take over, minimizing disruptions.
+9. Scalability and Load Distribution:
+
+Why Adding More Servers: As user traffic increases, adding more servers helps distribute the load and maintain good performance. This scalability also ensures that the infrastructure can handle varying levels of traffic.
+By splitting the components and adding a new server, the infrastructure becomes more flexible and can handle higher traffic loads efficiently. It also maintains high availability through load balancing and redundancy in both the load balancer and the database cluster. This design provides a foundation for horizontal scalab
