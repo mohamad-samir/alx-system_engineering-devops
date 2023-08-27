@@ -1,0 +1,50 @@
+ 
+Designing a simple web infrastructure with a LAMP stack (Linux, Apache, MySQL, PHP/Python/Perl) involves several components to ensure the website is accessible and functional. Let's go through the requirements and the questions step by step:
+
+1. User Access:
+
+A user wants to access the website www.foobar.com in their web browser.
+2. Server:
+
+The server is a physical or virtual machine that hosts all the components of the web infrastructure.
+It's responsible for processing requests and serving content to users.
+3. Domain Name:
+
+The domain name (foobar.com) is the user-friendly address that users type into their browser to access the website.
+It's used to identify the location of the server on the internet.
+4. www DNS Record:
+
+The "www" DNS record is a subdomain of foobar.com that's used to indicate the web server's address.
+It's a CNAME (Canonical Name) record pointing to the domain itself, ensuring that www.foobar.com resolves to the same IP as foobar.com.
+5. Web Server (Nginx):
+
+The web server (Nginx) handles incoming HTTP requests from users' browsers.
+It serves static content directly and routes dynamic content requests to the application server.
+Nginx acts as a reverse proxy, forwarding requests to the application server and then returning responses to users.
+6. Application Server:
+
+The application server is responsible for processing dynamic content requests (e.g., executing PHP scripts).
+It communicates with the web server to deliver the processed content.
+The application files (code base) reside on the application server.
+7. Database (MySQL):
+
+The database (MySQL) stores and manages the website's data, such as user accounts, articles, or products.
+The application server communicates with the database to retrieve or update information.
+8. Communication with Users:
+
+The server communicates with users' computers over the HTTP protocol. Users' browsers send HTTP requests, and the server responds with HTML, CSS, JavaScript, and other assets.
+Issues with the Infrastructure:
+
+Single Point of Failure (SPOF):
+
+Since there's only one server, if it goes down, the entire website becomes inaccessible.
+To mitigate this, you could consider setting up a load balancer with multiple servers to distribute traffic and provide redundancy.
+Downtime During Maintenance:
+
+When maintenance is needed (such as deploying new code), the web server might need to be restarted, resulting in downtime.
+To avoid downtime, a load balancer with multiple servers can be configured, allowing updates on one server while others continue to serve requests.
+Limited Scalability:
+
+With a single server, the infrastructure cannot handle a large influx of incoming traffic.
+To scale, you could add more servers behind a load balancer and potentially implement caching mechanisms or use a content delivery network (CDN) to distribute content globally.
+Overall, this simple web infrastructure has basic components for serving a website, but it lacks high availability, scalability, and fault tolerance. Addressing these issues would involve adding redundancy, load balancing, and implementing strategies to minimize downtime during maintenance.
