@@ -1,0 +1,55 @@
+ 
+1. User Accessing the Website:
+A user wants to access the website hosted at www.foobar.com.
+
+2. Load-Balancer (HAproxy) with SSL Termination:
+
+Why Adding It: To distribute traffic and enhance security by terminating SSL at the load balancer, reducing the load on backend servers.
+SSL Termination: The load balancer handles SSL encryption and decryption, forwarding decrypted traffic to backend servers.
+3. Web Server (Nginx):
+
+Why Adding It: To handle incoming HTTP requests, serve static content, and manage SSL certificates for HTTPS.
+Role: Nginx receives decrypted requests from the load balancer and serves static content over HTTPS.
+4. Application Server:
+
+Why Adding It: To process dynamic requests, run the application codebase, interact with databases, and generate dynamic content.
+Role: The application server handles user-specific requests, communicates with the database, and generates responses.
+5. Application Files (Your Code Base):
+
+Why Adding It: This code base contains the logic, functionality, and database interactions for the website.
+Role: The application server runs this code to generate responses based on user requests.
+6. Database (MySQL Primary-Replica Cluster):
+
+Why Adding It: To store structured data, ensure data redundancy, and improve fault tolerance.
+Primary-Replica Cluster: The primary (master) database node handles both write and read operations, while replica (slave) nodes handle read requests.
+7. Firewalls:
+
+Why Adding Them: Firewalls add an additional layer of security to protect the servers from unauthorized access and potential attacks.
+8. SSL Certificate for HTTPS:
+
+Why Adding It: To encrypt data transmitted between users and the web server, ensuring data confidentiality and integrity.
+9. Monitoring Clients (Data Collectors):
+
+Why Adding Them: Monitoring helps track the health, performance, and security of the infrastructure.
+Data Collection: Monitoring clients collect data about server performance, resource usage, and potential issues.
+10. Monitoring Tool:
+
+Why Adding It: Monitoring provides insights into the infrastructure's behavior and helps with troubleshooting.
+Data Collection Process: The monitoring tool collects data from monitoring clients on each server and presents it in a dashboard for analysis.
+11. Monitoring Web Server QPS (Queries Per Second):
+
+How to Monitor QPS: Configure the monitoring tool to track the number of incoming requests to the web server per second. This can help identify traffic spikes, potential performance bottlenecks, and the need for scalability.
+Issues with this Infrastructure:
+
+Terminating SSL at Load Balancer Level: Termination can expose sensitive data between the load balancer and backend servers, potentially compromising security.
+Single MySQL Server Accepting Writes: A single point of failure exists if the primary database server becomes unavailable or fails.
+Identical Server Components: If all servers have the same components and are affected by a common issue, such as a software bug, it could lead to widespread problems.
+To address these issues:
+
+Consider end-to-end encryption between load balancer and backend servers.
+Implement database replication for high availability and failover.
+Introduce some diversity in server components or use microservices architecture to reduce the impact of widespread issues.
+
+
+
+
