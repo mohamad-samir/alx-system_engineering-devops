@@ -1,0 +1,42 @@
+1. User Accessing the Website:
+A user wants to access the website hosted at www.foobar.com.
+
+2. Load-Balancer (HAproxy):
+
+Why Adding It: To distribute incoming user requests across multiple servers, improving performance and reliability.
+Distribution Algorithm: Round-robin, where each server receives an equal number of requests in a cyclic order.
+Active-Active vs. Active-Passive: Active-Active setup, where both load balancers are actively distributing traffic. This increases availability by preventing a single point of failure (SPOF).
+3. Web Server (Nginx):
+
+Why Adding It: To handle incoming HTTP requests, serve static content, and manage SSL/TLS encryption.
+Role: Nginx receives user requests forwarded by the load balancer and, if required, forwards dynamic requests to the application server.
+4. Application Server:
+
+Why Adding It: To process dynamic requests, run the application codebase, interact with databases, and generate dynamic content.
+Role: The application server handles user-specific requests, communicates with the database, and generates responses to be sent back to Nginx.
+5. Application Files (Your Code Base):
+
+Why Adding It: This code base contains the logic, functionality, and database interactions for the website.
+Role: The application server runs this code to generate responses based on user requests.
+6. Database (MySQL - Primary-Replica Cluster):
+
+Why Adding It: To store structured data, ensure data redundancy, and improve fault tolerance.
+Primary-Replica Cluster: The primary (master) database node handles both read and write operations, while replica (slave) nodes replicate data from the primary and handle read requests. This setup improves performance and provides data redundancy.
+7. Differences Between Primary and Replica Nodes:
+
+In Regards to the Application: The primary node handles write operations, meaning any data changes (inserts, updates) are made here. The replica nodes handle read operations, ensuring that read-heavy queries don't impact the primary node's performance.
+Issues with this Infrastructure:
+
+Single Point of Failure (SPOF): The load balancer itself is a potential SPOF. If it fails, traffic distribution might stop.
+Security Issues: Lack of firewall and HTTPS exposes the infrastructure to potential security threats and attacks.
+No Monitoring: Without proper monitoring, it's challenging to detect and address performance issues, downtimes, or other problems proactively.
+To address these issues:
+
+Implement high availability for the load balancer using a failover mechanism.
+Set up firewalls to protect the servers and use HTTPS to encrypt communication.
+Implement monitoring tools to track server health, performance metrics, and potential security breaches.
+
+
+
+
+
