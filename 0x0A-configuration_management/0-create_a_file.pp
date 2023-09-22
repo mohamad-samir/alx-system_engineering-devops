@@ -1,3 +1,4 @@
+
 file { '/tmp/school':
   ensure  => 'file',
   mode    => '0744',
