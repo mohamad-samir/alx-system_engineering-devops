@@ -1,34 +1,27 @@
-#!/usr/bin/env bash
-# Bash script that configures an Nginx server so that
-# /redirect_me is redirecting to another page.
+#!/bin/bash
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
+# Check if nginx is installed
+if [ ! -x "$(command -v nginx)" ]; then
+  echo "Nginx is not installed. Please install it first."
+  exit 1
+fi
 
-# Create a index file
-echo "Hello World!" > /var/www/html/uche.html
+# Define the path to the Nginx configuration file
+nginx_config="/etc/nginx/sites-available/default"
 
-# Check if the backup file exists for the original `default` file.
-# This is meant to back up the file once the first time, after installing nginx.
-# if [ ! -f /etc/nginx/sites-available/default.bak ]; then
-#     sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-# fi
-# 
-# if [ ! -f /etc/nginx/sites-enabled/default.bak ]; then
-#     sudo cp /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default.bak
-# fi
+# Define the location to redirect from
+redirect_location="/redirect_me"
 
-# This modifies the `default` file, that is why I backed it up first
-printf %s "server {
-    listen 80;
-    listen [::]:80 default_server;
+# Define the target URL for redirection
+target_url="https://github.com/mohamad-samir"
 
-    root /var/www/html;
-    index uche.html index.html index.htm index.nginx-debian.html;
+# Use sed to replace the location block with a redirection block
+sed -i "/location $redirect_location {/!b;n;c\\
+    return 301 $target_url;
+}" "$nginx_config"
 
-    location /redirect_me {
-        return 301 https://www.github.com/Cofucan;
-    }
-}" > /etc/nginx/sites-enabled/default
+# Reload Nginx to apply the changes
+nginx -s reload
 
-sudo service nginx restart
+# Output a message indicating the configuration is complete
+echo "Redirection configured successfully."
