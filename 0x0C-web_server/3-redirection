@@ -27,7 +27,7 @@ printf %s "server {
     index uche.html index.html index.htm index.nginx-debian.html;
 
     location /redirect_me {
-        return 301 https://github.com/mohamad-samir;
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
     }
 }" > /etc/nginx/sites-enabled/default
 
