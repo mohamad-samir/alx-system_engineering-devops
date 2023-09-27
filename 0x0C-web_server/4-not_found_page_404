@@ -32,7 +32,7 @@ server {
     index uche.html index.html index.htm index.nginx-debian.html;
 
     location /redirect_me {
-        return 301 https://www.github.com/Cofucan;
+        return 301 https://github.com/mohamad-samir;
     }
 
     error_page 404 /404.html;
