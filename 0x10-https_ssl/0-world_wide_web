@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# This script contains a function that
+# prints the IP address and record type
+# of domains passed into it
+
+
+function ip(){
+	echo "$(dig "$domain" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -F ' ' '{print $5}')"
+}
+function record(){
+	echo "$(dig "$domain" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -F ' ' '{print $4}')"
+}
+
+if [ "$#" -gt 1 ]
+then
+	i=1
+	subdomain=""
+	for arg in "$@"
+	do
+		if [ "$i" -eq 1 ]; then subdomain=$arg; ((i++)); continue; fi	
+		domain="$arg.$subdomain"
+		ip=$(ip "$domain")
+		record=$(record "$domain")
+		printf "The subdomain %s is a %s record and points to %s\n" "$arg" "$record" "$ip"
+	done
+else
+	sub_domains=("www" "lb-01" "web-01" "web-02")
+	
+	for ((i=0; i < "${#sub_domains[@]}"; i++))
+	do
+		domain="${sub_domains[i]}.$1"
+		ip=$(ip "$domain")
+		record=$(record "$domain")
+		printf "The subdomain %s is a %s record and points to %s\n" "${sub_domains[i]}" "$record" "$ip"
+	done
+fi
