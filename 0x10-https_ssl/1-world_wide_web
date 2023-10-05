@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# a Bash script that will display information about subdomains
+
+display_info()
+{
+    r_type=$(dig "$2.$1" | grep -A1 'ANSWER SECTION:' | awk '{printf "%s", $4}')
+    ip=$(dig "$2.$1" | grep -A1 'ANSWER SECTION:' | awk '{printf "%s", $5}')
+    printf "The subdomain %s is a %s record and points to %s\n" "$2" "$r_type" "$ip"
+}
+
+if [ -z "$2" ]; then
+    for sd in "www" "lb-01" "web-01" "web-02"
+    do
+	display_info "$1" "$sd"
+    done
+else
+    display_info "$2.$1" "$2"
+fi
