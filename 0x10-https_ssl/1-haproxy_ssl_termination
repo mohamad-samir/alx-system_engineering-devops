@@ -50,3 +50,11 @@ listen http-in-3
     balance roundrobin
     server 355909-web-01 100.24.235.23:80 check
     server 355909-web-02 3.85.141.52:80 check
+
+frontend www-frontend
+    bind *:443 ssl crt /etc/letsencrypt/live/www.elzero.tech/fullchain.pem
+    default_backend www-backend
+
+backend www-backend
+    server 355909-web-01 100.24.235.23:80 check
+    server 355909-web-02 3.85.141.52:80 check
