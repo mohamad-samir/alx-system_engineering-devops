@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
-# script to dig subdomain records for the domain specified
-# shellcheck disable=SC2027
-# shellcheck disable=SC2086
+# Shows information about subdomains.
 
-function get_a_records() {
-    if [[ -n "$2" ]]; then
-        response="$(dig "$2.$1" | grep -i -A1 "answer section" | tail -n 1)"
-        destination="$(echo "$response" | awk '{ print $5 }')"
-        record_type="$(echo "$response" | awk '{ print $4 }')"
-        echo "The subdomain $2 is a $record_type record and points to $destination"
-    else
-        subdomains=("www" "lb-01" "web-01" "web-02")
-        for sub_d in "${subdomains[@]}"; do
-            response="$(dig "$sub_d.$1" | grep -i -A1 "answer section" | tail -n 1)"
-            destination="$(echo "$response" | awk '{ print $5 }')"
-            record_type="$(echo "$response" | awk '{ print $4 }')"
-            echo "The subdomain $sub_d is a $record_type record and points to $destination"
-        done
-    fi
+domain_information() {
+    local domain="$1"
+    local subdomain="$2"
+    local line
+    line=$(dig "$subdomain"."$domain" | awk '/ANSWER SECTION:/ {getline; print; getline; print}')
+    echo "$subdomain $line" | awk '{printf "The subdomain %s is a %s record and points to %s\n", $1, $2, $3}'
 }
 
-get_a_records "$1" "$2"
+if [ "$#" -eq 1 ]; then
+    domain_information "$1" "www"
+    domain_information "$1" "lb-01"
+    domain_information "$1" "web-01"
+    domain_information "$1" "web-02"
+elif [ "$#" -eq 2 ]; then
+    domain_information "$1" "$2"
+fi
