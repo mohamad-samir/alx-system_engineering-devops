@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
-# Displays information about subdomains and record typr for a domains
+#Configure your domain zone so that the subdomain www points 
+#to your load-balancer IP (lb-01). Let’s also add other 
+#subdomains to make our life easier, and write a Bash
+#script that will display information about subdomains.
 
-print_dns () 
-{
-    script=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
-    echo "$2 $script" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
+subdomains_all=( "www" "lb-01" "web-01" "web-02" )
+
+runDig () {
+    subdomain=$1
+    domain=$2
+
+    dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -v s="$subdomain" 'BEGIN { FS = " " } ; { print "The subdomain " s " is a " $4 " record and points to " $5 }'
 }
 
-if [ "$#" == 1 ]
-then
-  print_dns "$1" "www"
-  print_dns "$1" "lb-01"
-  print_dns "$1" "web-01"
-  print_dns "$1" "web-02"
-elif [ "$#" == 2 ]
-then
-  print_dns "$1" "$2"
+if [ $# -eq 1 ]; then
+    domain="$1"
+    for i in "${subdomains_all[@]}"
+    do
+	runDig "$i" "$domain"
+    done
+elif [ $# -eq 2 ]; then
+    domain="$1"
+    subdomain="$2"
+    runDig "$subdomain" "$domain"
 fi
