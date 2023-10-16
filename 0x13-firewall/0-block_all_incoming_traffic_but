@@ -1,23 +1,29 @@
 #!/bin/bash
 
 # Install ufw if not already installed
-sudo apt-get install ufw -y
+if ! command -v ufw &> /dev/null; then
+    echo "Installing ufw..."
+    sudo apt-get update
+    sudo apt-get install -y ufw
+fi
 
 # Enable ufw
 sudo ufw enable
 
-# Allow SSH, HTTPS, and HTTP traffic
+# Allow SSH (Port 22)
 sudo ufw allow 22/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 80/tcp
 
-# Block all other incoming traffic
+# Allow HTTP (Port 80) and HTTPS (Port 443)
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Set default policy to deny incoming traffic
 sudo ufw default deny incoming
 
-# Display ufw status
-sudo ufw status
+# Enable the firewall
+sudo ufw enable
 
-echo "UFW configuration completed."
+# Show ufw status
+sudo ufw status verbose
 
-# Exit the script
-exit 0
+echo "ufw configuration completed."
