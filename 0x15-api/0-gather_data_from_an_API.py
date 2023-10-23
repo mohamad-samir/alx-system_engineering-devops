@@ -1,44 +1,29 @@
 #!/usr/bin/python3
 """ Rest API script that gathers data from an API. """
-import json
+import requests
 import sys
-import urllib
-import urllib.request
 
-# The base API url for getting the employee object
-USER_API_URL = "https://jsonplaceholder.typicode.com/users/"
+if __name__ == "__main":
+    if len(sys.argv) != 2:
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+        sys.exit(1)
 
-# The base API url for getting all todo objects for an employee
-TODO_API_URL = "https://jsonplaceholder.typicode.com/todos?userId="
+    employee_id = sys.argv[1]
+    base_url = "https://jsonplaceholder.typicode.com"
+    user_url = f"{base_url}/users/{employee_id}"
+    todos_url = f"{base_url}/todos?userId={employee_id}"
 
-# Employee ID passed as an argument to the script
-emp_id: str = sys.argv[1] if len(sys.argv) > 1 else ""
-
-# Get all the todos for a given employee ID
-if emp_id.isdigit():
     try:
-        user_url = f"{USER_API_URL}{emp_id}"
-        todos_url = f"{TODO_API_URL}{emp_id}"
+        user_response = requests.get(user_url)
+        todos_response = requests.get(todos_url)
+        user_data = user_response.json()
+        todos_data = todos_response.json()
+        
+        completed_tasks = [task for task in todos_data if task['completed']]
+        
+        print(f"Employee {user_data['name']} is done with tasks({len(completed_tasks)}/{len(todos_data)}):")
+        for task in completed_tasks:
+            print(f"\t {task['title']}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
 
-        emp_response = urllib.request.urlopen(user_url)
-        todos_response = urllib.request.urlopen(todos_url)
-
-        emp_data = emp_response.read()
-        todos_data = todos_response.read()
-
-        employee = json.loads(emp_data)
-        todos = json.loads(todos_data)
-
-        name = employee.get("name")
-        done = len([todo for todo in todos if todo.get("completed")])
-        total = len(todos)
-
-        print(f"Employee {name} is done with tasks({done}/{total}):")
-        for todo in todos:
-            if todo.get("completed"):
-                print(f"\t {todo.get('title')}")
-
-    except urllib.error.URLError as err:
-        print(f"An error occurred: {err}")
-    except json.JSONDecodeError as err:
-        print(f"Error decoding JSON: {err}")
