@@ -18,12 +18,13 @@ if __name__ == "__main":
         todos_response = requests.get(todos_url)
         user_data = user_response.json()
         todos_data = todos_response.json()
-        
+
         completed_tasks = [task for task in todos_data if task['completed']]
-        
-        print(f"Employee {user_data['name']} is done with tasks({len(completed_tasks)}/{len(todos_data)}):")
+
+        print(
+            f"Employee {user_data['name']} 
+            is done with tasks({len(completed_tasks)}/{len(todos_data)}):")
         for task in completed_tasks:
             print(f"\t {task['title']}")
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
-
