@@ -1,45 +1,18 @@
 #!/usr/bin/python3
-""" Rest API script that gathers data from an API and saves it to a CSV. """
+"""Exports to-do list information for a given employee ID to CSV format."""
 import csv
-import json
+import requests
 import sys
-import urllib
-import urllib.request
 
-# The base API url for getting the employee object
-USER_API_URL = "https://jsonplaceholder.typicode.com/users/"
+if __name__ == "__main__":
+    user_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
+    todos = requests.get(url + "todos", params={"userId": user_id}).json()
 
-# The base API url for getting all todo objects for an employee
-TODO_API_URL = "https://jsonplaceholder.typicode.com/todos?userId="
-
-# Employee ID passed as an argument to the script
-emp_id: str = sys.argv[1] if len(sys.argv) > 1 else ""
-
-# Get all the todos for a given employee ID
-if emp_id.isdigit():
-    try:
-        user_url = f"{USER_API_URL}{emp_id}"
-        todos_url = f"{TODO_API_URL}{emp_id}"
-
-        emp_response = urllib.request.urlopen(user_url)
-        todos_response = urllib.request.urlopen(todos_url)
-
-        emp_data = emp_response.read()
-        todos_data = todos_response.read()
-
-        employee = json.loads(emp_data)
-        todos = json.loads(todos_data)
-
-        username = employee.get("username")
-
-        with open(f"{emp_id}.csv", "w", newline="") as csvfile:
-            writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-            for todo in todos:
-                todo_status = todo.get("completed")
-                todo_title = todo.get("title")
-                writer.writerow([emp_id, username, todo_status, todo_title])
-
-    except urllib.error.URLError as err:
-        print(f"An error occurred: {err}")
-    except json.JSONDecodeError as err:
-        print(f"Error decoding JSON: {err}")
+    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        [writer.writerow(
+            [user_id, username, t.get("completed"), t.get("title")]
+         ) for t in todos]
