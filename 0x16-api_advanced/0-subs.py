@@ -10,7 +10,8 @@ def number_of_subscribers(subreddit):
     # Set the URL for the Reddit API
     url = f'https://www.reddit.com/r/{subreddit}/about.json'
 
-    # Set headers to have a custom User-Agent to avoid being blocked by Reddit's API for having a default User-Agent
+    # Set headers to have a custom User-Agent to avoid being
+    # blocked by Reddit's API for having a default User-Agent
     headers = {'User-Agent': 'My User Agent 1.0'}
 
     # Make the request to the Reddit API
