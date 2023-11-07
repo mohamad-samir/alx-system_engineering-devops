@@ -1,42 +1,45 @@
 #!/usr/bin/python3
-"""Contains the count_words function"""
+"""
+2-recurse.py
+"""
+
 import requests
 
 
-def count_words(subreddit, word_list, found_list=[], after=None):
-    '''Prints counts of given words found in hot posts of a given subreddit.
-    Args:
-        subreddit (str): The subreddit to search.
-        word_list (list): The list of words to search for in post titles.
-        found_list (obj): Key/value pairs of words/counts.
-        after (str): The parameter for the next page of the API results.
-    '''
-    user_agent = {'User-agent': 'test45'}
-    posts = requests.get('http://www.reddit.com/r/{}/hot.json?after={}'
-                         .format(subreddit, after), headers=user_agent)
-    if after is None:
-        word_list = [word.lower() for word in word_list]
+def count_words(subreddit, word_list, after='', word_count={}):
+    headers = {
+        'User-Agent': 'Python/requests:APIproject:version1.0 (by /u/username)'}
+    payload = {'after': after}
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+    response = requests.get(url, headers=headers,
+                            params=payload, allow_redirects=False)
 
-    if posts.status_code == 200:
-        posts = posts.json()['data']
-        aft = posts['after']
-        posts = posts['children']
-        for post in posts:
-            title = post['data']['title'].lower()
-            for word in title.split(' '):
-                if word in word_list:
-                    found_list.append(word)
-        if aft is not None:
-            count_words(subreddit, word_list, found_list, aft)
-        else:
-            result = {}
-            for word in found_list:
-                if word.lower() in result.keys():
-                    result[word.lower()] += 1
-                else:
-                    result[word.lower()] = 1
-            for key, value in sorted(result.items(), key=lambda item: item[1],
-                                     reverse=True):
-                print('{}: {}'.format(key, value))
-    else:
+    if response.status_code != 200:
+        return None
+
+    if after is None:
+        # Base case, when there are no more pages to go through
+        sorted_words = sorted(word_count.items(),
+                              key=lambda kv: (-kv[1], kv[0]))
+        for word, count in sorted_words:
+            print(f"{word}: {count}")
         return
+
+    # Initial setup for word_count dictionary
+    if not word_count:
+        word_count = {word.lower(): 0 for word in word_list}
+
+    # Get the list of posts
+    posts = response.json().get('data').get('children')
+
+    # Count the words in the titles of each post
+    for post in posts:
+        title = post.get('data').get('title').lower()
+        for word in word_count.keys():
+            word_count[word] += title.count(word)
+
+    # Get the 'after' value for the next page
+    after = response.json().get('data').get('after')
+
+    # Recurse with the next page
+    count_words(subreddit, word_list, after, word_count)
